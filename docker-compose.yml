@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-backend
     command: npm run dev:backend
     ports:
@@ -17,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-spa-redux
     command: npm run dev:spa-redux
     ports:
@@ -34,6 +36,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-ssr-csr
     command: npm run dev:ssr-csr
     environment:
@@ -54,6 +57,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-jamstack
     command: npm run dev:jamstack
     environment:
@@ -74,6 +78,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-micro-list
     command: sh -c "npm run build:micro-list && npm run preview:micro-list"
     ports:
@@ -91,6 +96,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-micro-detail
     command: sh -c "npm run build:micro-detail && npm run preview:micro-detail"
     ports:
@@ -108,6 +114,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-micro-crud
     command: sh -c "npm run build:micro-crud && npm run preview:micro-crud"
     ports:
@@ -125,6 +132,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${APP_IMAGE:-ghcr.io/antonio27urrp/experiment-stand-app:latest}
     container_name: bench-micro-shell
     command: sh -c "npm run build:micro-shell && npm run preview:micro-shell"
     environment:

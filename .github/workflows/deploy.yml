@@ -2,7 +2,7 @@ name: Deploy To Server
 
 on:
   workflow_run:
-    workflows: ["Benchmark CI/CD"]
+    workflows: ["Publish Runtime Image"]
     types: [completed]
     branches: ["main", "master"]
   workflow_dispatch:
@@ -35,8 +35,15 @@ jobs:
           script: |
             set -e
             APP_DIR="${{ secrets.SERVER_APP_DIR }}"
+            APP_IMAGE="${{ secrets.APP_IMAGE }}"
+            GHCR_USERNAME="${{ secrets.GHCR_USERNAME }}"
+            GHCR_TOKEN="${{ secrets.GHCR_TOKEN }}"
             if [ -z "$APP_DIR" ]; then
               echo "SERVER_APP_DIR is empty. Set it in GitHub Secrets."
+              exit 1
+            fi
+            if [ -z "$APP_IMAGE" ]; then
+              echo "APP_IMAGE is empty. Set it in GitHub Secrets (example: ghcr.io/owner/experiment-stand-app:latest)."
               exit 1
             fi
             mkdir -p "$APP_DIR"
@@ -48,6 +55,15 @@ jobs:
             git fetch --all
             git checkout "${{ github.ref_name }}"
             git pull --ff-only origin "${{ github.ref_name }}"
+            docker system df || true
+            docker builder prune -af || true
+            docker image prune -af || true
+            docker container prune -f || true
+            docker system df || true
+            if [ -n "$GHCR_USERNAME" ] && [ -n "$GHCR_TOKEN" ]; then
+              echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+            fi
+            export APP_IMAGE="$APP_IMAGE"
             docker compose pull
-            docker compose up -d --build --remove-orphans
-            docker image prune -f
+            COMPOSE_PARALLEL_LIMIT=1 docker compose up -d --remove-orphans
+            docker image prune -af
