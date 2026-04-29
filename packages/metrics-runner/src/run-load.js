@@ -1,9 +1,17 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
-import { benchmarkTargets, scenarioPath, scenariosDir, throttling } from "./config.js";
+import {
+  benchmarkTargets,
+  scenarioPath,
+  scenariosDir,
+  throttling,
+  backendApiUrl
+} from "./config.js";
 import { collectRuntimeMetadata } from "./runtime-metadata.js";
 import { writeResult } from "./result-writer.js";
+
+const benchmarkBackendOrigin = new URL(backendApiUrl).origin;
 
 function getArg(name, fallback) {
   const prefix = `--${name}=`;
@@ -145,7 +153,7 @@ async function createSession(browser, targetUrl, sessionId) {
     const requestUrl = new URL(request.url());
     const targetOrigin = new URL(targetUrl).origin;
 
-    if (requestUrl.origin !== targetOrigin && requestUrl.origin !== "http://localhost:4000") {
+    if (requestUrl.origin !== targetOrigin && requestUrl.origin !== benchmarkBackendOrigin) {
       await route.continue();
       return;
     }

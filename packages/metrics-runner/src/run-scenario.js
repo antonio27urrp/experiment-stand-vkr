@@ -1,9 +1,17 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
-import { benchmarkTargets, scenarioPath, scenariosDir, throttling } from "./config.js";
+import {
+  benchmarkTargets,
+  scenarioPath,
+  scenariosDir,
+  throttling,
+  backendApiUrl
+} from "./config.js";
 import { collectRuntimeMetadata } from "./runtime-metadata.js";
 import { writeResult } from "./result-writer.js";
+
+const benchmarkBackendOrigin = new URL(backendApiUrl).origin;
 
 function getArg(name, fallback) {
   const prefix = `--${name}=`;
@@ -95,7 +103,7 @@ try {
     const requestUrl = new URL(request.url());
     const targetOrigin = new URL(target.url).origin;
 
-    if (requestUrl.origin !== targetOrigin && requestUrl.origin !== "http://localhost:4000") {
+    if (requestUrl.origin !== targetOrigin && requestUrl.origin !== benchmarkBackendOrigin) {
       await route.continue();
       return;
     }
@@ -179,7 +187,7 @@ try {
   const relevantRequestEvents = requestEvents.filter((event) => {
     const requestUrl = new URL(event.url);
     const targetOrigin = new URL(target.url).origin;
-    return requestUrl.origin === targetOrigin || requestUrl.origin === "http://localhost:4000";
+    return requestUrl.origin === targetOrigin || requestUrl.origin === benchmarkBackendOrigin;
   });
   const requestStarts = relevantRequestEvents.map((event) => event.startedAtMs);
   const requestEnds = relevantRequestEvents.map((event) => event.finishedAtMs);
@@ -190,7 +198,7 @@ try {
     const parsed = new URL(event.url);
     return parsed.pathname.includes("/assets/") && parsed.pathname.endsWith(".js");
   }).length;
-  const backendRequests = relevantRequestEvents.filter((event) => event.url.startsWith("http://localhost:4000")).length;
+  const backendRequests = relevantRequestEvents.filter((event) => event.url.startsWith(backendApiUrl)).length;
   const firstModuleMs =
     architecture === "micro-frontends" && typeof microFrontendMetrics?.firstModuleMs === "number"
       ? Math.round(microFrontendMetrics.firstModuleMs)

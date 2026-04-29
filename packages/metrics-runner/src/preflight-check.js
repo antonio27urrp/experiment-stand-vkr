@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { backendApiUrl, benchmarkTargets } from "./config.js";
+import { backendApiUrl, benchmarkTargets, publicBenchmarkHost } from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -101,9 +101,9 @@ async function checkMicroFrontendsRemotes(selectedArchitectures) {
   }
 
   const remotes = [
-    "http://localhost:5111/assets/remoteEntry.js",
-    "http://localhost:5112/assets/remoteEntry.js",
-    "http://localhost:5113/assets/remoteEntry.js"
+    `http://${publicBenchmarkHost}:5111/assets/remoteEntry.js`,
+    `http://${publicBenchmarkHost}:5112/assets/remoteEntry.js`,
+    `http://${publicBenchmarkHost}:5113/assets/remoteEntry.js`
   ];
 
   for (const remoteUrl of remotes) {

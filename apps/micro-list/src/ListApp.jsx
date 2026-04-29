@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "@benchmark/shared-ui/styles.css";
 
-const defaultApiUrl = "http://localhost:4000";
+const defaultApiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:4000";
 
 function buildQuery({ search, category, sortBy }) {
   return new URLSearchParams({

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from "react";
 import { registerWebVitalsCollector } from "./webVitalsCollector.js";
 
+/** Fallback for local/dev; production pages should pass `apiUrl`. */
 const defaultApiUrl = "http://localhost:4000";
 
 const initialState = {
