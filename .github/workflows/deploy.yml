@@ -34,7 +34,13 @@ jobs:
           script_stop: true
           script: |
             set -e
-            cd "${{ secrets.SERVER_APP_DIR }}"
+            APP_DIR="${{ secrets.SERVER_APP_DIR }}"
+            if [ -z "$APP_DIR" ]; then
+              echo "SERVER_APP_DIR is empty. Set it in GitHub Secrets."
+              exit 1
+            fi
+            mkdir -p "$APP_DIR"
+            cd "$APP_DIR"
             if [ ! -d .git ]; then
               git init
               git remote add origin "https://github.com/${{ github.repository }}.git"
