@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+coverage/
+
+# Local backend runtime data
+apps/backend/data/
+
+# Generated experiment artifacts
+experiments/results/
+experiments/reports/
+experiments/archive/
+
+# Misc local artifacts
+*.log
+Thumbs.db
+.DS_Store

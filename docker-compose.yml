@@ -1,0 +1,145 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-backend
+    command: npm run dev:backend
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  spa-redux:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-spa-redux
+    command: npm run dev:spa-redux
+    ports:
+      - "5102:5102"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5102').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  ssr-csr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-ssr-csr
+    command: npm run dev:ssr-csr
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+    ports:
+      - "5104:5104"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5104').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  jamstack:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-jamstack
+    command: npm run dev:jamstack
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+    ports:
+      - "5105:5105"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5105').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  micro-list:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-micro-list
+    command: sh -c "npm run build:micro-list && npm run preview:micro-list"
+    ports:
+      - "5111:5111"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5111/remoteEntry.js').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  micro-detail:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-micro-detail
+    command: sh -c "npm run build:micro-detail && npm run preview:micro-detail"
+    ports:
+      - "5112:5112"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5112/remoteEntry.js').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  micro-crud:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-micro-crud
+    command: sh -c "npm run build:micro-crud && npm run preview:micro-crud"
+    ports:
+      - "5113:5113"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5113/remoteEntry.js').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  micro-shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bench-micro-shell
+    command: sh -c "npm run build:micro-shell && npm run preview:micro-shell"
+    environment:
+      VITE_API_URL: http://localhost:4000
+    ports:
+      - "5103:5103"
+    depends_on:
+      backend:
+        condition: service_healthy
+      micro-list:
+        condition: service_healthy
+      micro-detail:
+        condition: service_healthy
+      micro-crud:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5103').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6

@@ -1,0 +1,49 @@
+{
+  "name": "frontend-architecture-benchmark",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:backend": "npm --workspace apps/backend run dev",
+    "dev:spa-flux": "npm --workspace apps/spa-flux run dev",
+    "dev:spa-redux": "npm --workspace apps/spa-redux run dev",
+    "dev:micro-shell": "npm --workspace apps/micro-shell run dev",
+    "dev:micro-list": "npm --workspace apps/micro-list run dev",
+    "dev:micro-detail": "npm --workspace apps/micro-detail run dev",
+    "dev:micro-crud": "npm --workspace apps/micro-crud run dev",
+    "dev:ssr-csr": "npm --workspace apps/ssr-csr run dev",
+    "dev:jamstack": "npm --workspace apps/jamstack run dev",
+    "dev:server-driven-ui": "npm --workspace apps/server-driven-ui run dev",
+    "preview:micro-shell": "npm --workspace apps/micro-shell run preview -- --strictPort",
+    "preview:micro-list": "npm --workspace apps/micro-list run preview -- --strictPort",
+    "preview:micro-detail": "npm --workspace apps/micro-detail run preview -- --strictPort",
+    "preview:micro-crud": "npm --workspace apps/micro-crud run preview -- --strictPort",
+    "build:spa-flux": "npm --workspace apps/spa-flux run build",
+    "build:spa-redux": "npm --workspace apps/spa-redux run build",
+    "build:micro-shell": "npm --workspace apps/micro-shell run build",
+    "build:micro-list": "npm --workspace apps/micro-list run build",
+    "build:micro-detail": "npm --workspace apps/micro-detail run build",
+    "build:micro-crud": "npm --workspace apps/micro-crud run build",
+    "build:ssr-csr": "npm --workspace apps/ssr-csr run build",
+    "build:jamstack": "npm --workspace apps/jamstack run build",
+    "build:server-driven-ui": "npm --workspace apps/server-driven-ui run build",
+    "build:all-apps": "npm run build:spa-flux; npm run build:spa-redux; npm run build:micro-list; npm run build:micro-detail; npm run build:micro-crud; npm run build:micro-shell; npm run build:ssr-csr; npm run build:jamstack; npm run build:server-driven-ui",
+    "seed:100": "npm --workspace apps/backend run seed -- --size 100",
+    "seed:1000": "npm --workspace apps/backend run seed -- --size 1000",
+    "seed:10000": "npm --workspace apps/backend run seed -- --size 10000",
+    "metrics": "npm --workspace packages/metrics-runner run start",
+    "test:scenario": "npm --workspace packages/metrics-runner run scenario",
+    "metrics:code": "npm --workspace packages/metrics-runner run analyze:code",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f --tail=200"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

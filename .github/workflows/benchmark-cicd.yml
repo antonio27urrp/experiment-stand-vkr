@@ -1,0 +1,95 @@
+name: Benchmark CI/CD
+
+on:
+  push:
+    branches: ["main", "master", "develop"]
+  pull_request:
+    branches: ["main", "master", "develop"]
+  workflow_dispatch:
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build benchmark applications
+        run: npm run build:all-apps
+
+      - name: Analyze code scalability metrics
+        run: npm run metrics:code
+
+      - name: Build Docker images
+        run: docker compose build
+
+      - name: Run benchmark stand in Docker
+        run: docker compose up -d
+
+      - name: Wait for services health
+        run: |
+          for url in \
+            http://localhost:4000/health \
+            http://localhost:5102 \
+            http://localhost:5103 \
+            http://localhost:5104 \
+            http://localhost:5105 \
+            http://localhost:5111/remoteEntry.js \
+            http://localhost:5112/remoteEntry.js \
+            http://localhost:5113/remoteEntry.js
+          do
+            echo "Waiting for $url ..."
+            for i in {1..60}; do
+              if curl -fsS "$url" >/dev/null; then
+                echo "OK: $url"
+                break
+              fi
+              if [ "$i" -eq 60 ]; then
+                echo "Timeout waiting for $url"
+                docker compose logs --tail=200
+                exit 1
+              fi
+              sleep 2
+            done
+          done
+
+      - name: Seed dataset
+        run: npm run seed:100
+
+      - name: Preflight checks for all architectures
+        run: npm --workspace packages/metrics-runner run preflight -- --architectures=spa-redux,micro-frontends,ssr-csr,jamstack
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Pilot scenario run (CI smoke)
+        run: npm --workspace packages/metrics-runner run scenario -- --architecture=spa-redux --scenario=user-flow --dataSize=100 --users=10 --run=1
+
+      - name: Upload experiment artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-artifacts
+          path: |
+            experiments/results
+            experiments/reports
+          if-no-files-found: warn
+
+      - name: Dump Docker logs on failure
+        if: failure()
+        run: docker compose logs --tail=300
+
+      - name: Shutdown containers
+        if: always()
+        run: docker compose down -v
