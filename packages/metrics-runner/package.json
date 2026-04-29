@@ -1,0 +1,24 @@
+{
+  "name": "@benchmark/metrics-runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/run-lighthouse.js",
+    "scenario": "node src/run-scenario.js",
+    "load": "node src/run-load.js",
+    "experiment": "node src/run-experiment.js",
+    "preflight": "node src/preflight-check.js",
+    "analyze": "node src/analyze-results.js",
+    "analyze:all": "node src/analyze-all.js",
+    "export:metrics": "node src/export-metrics-summary.js",
+    "analyze:code": "node src/analyze-code-scalability.js"
+  },
+  "dependencies": {
+    "chrome-launcher": "^1.1.2",
+    "jstat": "^1.9.6",
+    "lighthouse": "^12.4.0",
+    "playwright": "^1.45.0",
+    "simple-statistics": "^7.8.3"
+  }
+}

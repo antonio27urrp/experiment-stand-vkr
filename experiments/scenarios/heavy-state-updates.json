@@ -1,0 +1,35 @@
+{
+  "name": "heavy-state-updates",
+  "description": "Диагностический стресс-сценарий: тяжелые вычисления выполняются внутри reducer.",
+  "steps": [
+    {
+      "id": "load-home",
+      "action": "goto",
+      "target": "/",
+      "waitFor": "[data-testid='items-list']"
+    },
+    {
+      "id": "load-heavy-dataset",
+      "action": "click",
+      "target": "[data-testid='load-heavy-dataset']",
+      "waitFor": "[data-testid='heavy-dataset-ready']"
+    },
+    {
+      "id": "apply-heavy-filter",
+      "action": "fill",
+      "target": "[data-testid='heavy-search-input']",
+      "value": "Record"
+    },
+    {
+      "id": "sort-heavy-score",
+      "action": "click",
+      "target": "[data-testid='heavy-sort-score']"
+    },
+    {
+      "id": "run-heavy-updates",
+      "action": "click",
+      "target": "[data-testid='run-heavy-updates']",
+      "waitFor": "[data-testid='heavy-complete']"
+    }
+  ]
+}

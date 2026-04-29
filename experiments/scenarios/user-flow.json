@@ -1,0 +1,52 @@
+{
+  "name": "common-user-flow",
+  "description": "Единый пользовательский сценарий для всех архитектурных реализаций.",
+  "steps": [
+    {
+      "id": "load-home",
+      "action": "goto",
+      "target": "/",
+      "waitFor": "[data-testid='items-list']"
+    },
+    {
+      "id": "filter",
+      "action": "select",
+      "target": "[data-testid='filter-category']",
+      "value": "analytics"
+    },
+    {
+      "id": "search",
+      "action": "fill",
+      "target": "[data-testid='search-input']",
+      "value": "Record 2"
+    },
+    {
+      "id": "sort",
+      "action": "click",
+      "target": "[data-testid='sort-score']"
+    },
+    {
+      "id": "open-detail",
+      "action": "clickFirst",
+      "target": "[data-testid^='item-row-']"
+    },
+    {
+      "id": "edit",
+      "action": "fill",
+      "target": "[data-testid='item-title-input']",
+      "value": "Record 2 updated"
+    },
+    {
+      "id": "save",
+      "action": "click",
+      "target": "[data-testid='save-item']",
+      "waitFor": "[data-testid='save-complete']"
+    },
+    {
+      "id": "navigate-back",
+      "action": "click",
+      "target": "[data-testid='back-to-list']",
+      "waitFor": "[data-testid='items-list']"
+    }
+  ]
+}

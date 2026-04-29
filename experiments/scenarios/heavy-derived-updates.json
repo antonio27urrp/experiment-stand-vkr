@@ -1,0 +1,35 @@
+{
+  "name": "heavy-derived-updates",
+  "description": "Контрольный стресс-сценарий: тяжелые вычисления выполняются вне reducer, reducer только коммитит готовый результат.",
+  "steps": [
+    {
+      "id": "load-home",
+      "action": "goto",
+      "target": "/",
+      "waitFor": "[data-testid='items-list']"
+    },
+    {
+      "id": "load-heavy-dataset",
+      "action": "click",
+      "target": "[data-testid='load-heavy-dataset']",
+      "waitFor": "[data-testid='heavy-dataset-ready']"
+    },
+    {
+      "id": "apply-heavy-filter",
+      "action": "fill",
+      "target": "[data-testid='heavy-search-input']",
+      "value": "Record"
+    },
+    {
+      "id": "sort-heavy-score",
+      "action": "click",
+      "target": "[data-testid='heavy-sort-score']"
+    },
+    {
+      "id": "run-heavy-derived-updates",
+      "action": "click",
+      "target": "[data-testid='run-heavy-derived-updates']",
+      "waitFor": "[data-testid='heavy-derived-complete']"
+    }
+  ]
+}
