@@ -1,0 +1,90 @@
+body {
+  margin: 0;
+  background: #f5f7fb;
+  color: #172033;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.toolbar,
+.stress-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stress-panel {
+  align-items: center;
+  border: 1px solid #d9e1ee;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.stress-panel h2 {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 18px;
+}
+
+input,
+select,
+button {
+  border: 1px solid #cbd3df;
+  border-radius: 6px;
+  font: inherit;
+  padding: 10px 12px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px 90px;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  text-align: left;
+}
+
+.item-row strong {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.item-row span {
+  white-space: nowrap;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 160px 100px;
+  gap: 16px;
+  background: #ffffff;
+  text-align: left;
+}
+
+.schema-note {
+  color: #5c6b82;
+}

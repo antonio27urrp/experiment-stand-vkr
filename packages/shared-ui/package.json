@@ -1,0 +1,19 @@
+{
+  "name": "@benchmark/shared-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/BenchmarkApp.jsx",
+  "exports": {
+    ".": "./src/BenchmarkApp.jsx",
+    "./web-vitals": "./src/webVitalsCollector.js",
+    "./styles.css": "./src/styles.css"
+  },
+  "dependencies": {
+    "web-vitals": "^4.2.4"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
