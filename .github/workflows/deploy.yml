@@ -63,6 +63,9 @@ jobs:
             if [ -n "$GHCR_USERNAME" ] && [ -n "$GHCR_TOKEN" ]; then
               echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
             fi
+            export VITE_REMOTE_MICRO_LIST_URL="http://${{ secrets.SERVER_HOST }}:5111/remoteEntry.js"
+            export VITE_REMOTE_MICRO_DETAIL_URL="http://${{ secrets.SERVER_HOST }}:5112/remoteEntry.js"
+            export VITE_REMOTE_MICRO_CRUD_URL="http://${{ secrets.SERVER_HOST }}:5113/remoteEntry.js"
             export APP_IMAGE="$APP_IMAGE"
             docker compose pull
             COMPOSE_PARALLEL_LIMIT=1 docker compose up -d --remove-orphans
