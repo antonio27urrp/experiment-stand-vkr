@@ -137,6 +137,9 @@ services:
     command: sh -c "npm run build:micro-shell && npm run preview:micro-shell"
     environment:
       VITE_API_URL: http://localhost:4000
+      VITE_REMOTE_MICRO_LIST_URL: ${VITE_REMOTE_MICRO_LIST_URL:-http://localhost:5111/remoteEntry.js}
+      VITE_REMOTE_MICRO_DETAIL_URL: ${VITE_REMOTE_MICRO_DETAIL_URL:-http://localhost:5112/remoteEntry.js}
+      VITE_REMOTE_MICRO_CRUD_URL: ${VITE_REMOTE_MICRO_CRUD_URL:-http://localhost:5113/remoteEntry.js}
     ports:
       - "5103:5103"
     depends_on:
