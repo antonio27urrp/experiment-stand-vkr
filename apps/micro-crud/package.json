@@ -1,0 +1,19 @@
+{
+  "name": "@benchmark/micro-crud",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5113",
+    "build": "vite build && node -e \"const fs=require('node:fs'); const path=require('node:path'); const src='dist/assets'; const dst='dist'; fs.copyFileSync(path.join(src,'remoteEntry.js'),path.join(dst,'remoteEntry.js')); for (const f of fs.readdirSync(src)) { if (f.startsWith('__federation_') || f.startsWith('index-') || f.endsWith('.css')) { fs.copyFileSync(path.join(src,f),path.join(dst,f)); } } console.log('Copied federation assets from dist/assets to dist root');\"",
+    "preview": "vite preview --host 0.0.0.0 --port 5113",
+    "start": "vite preview --host 0.0.0.0 --port 5113"
+  },
+  "dependencies": {
+    "@originjs/vite-plugin-federation": "^1.3.6",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
